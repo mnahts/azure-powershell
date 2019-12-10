@@ -340,10 +340,10 @@ namespace Microsoft.Azure.Commands.Profile
 
                 SetContextWithOverwritePrompt((localProfile, profileClient, name) =>
                {
-                   bool? skipContextPopulationList = null;
-                   if (this.IsParameterBound(c => c.SkipContextPopulation))
+                   bool? shouldPopulateContextList = null;
+                   if (!this.IsParameterBound(c => c.SkipContextPopulation))
                    {
-                       skipContextPopulationList = false;
+                       shouldPopulateContextList = true;
                    }
 
                    profileClient.WarningLog = (message) => _tasks.Enqueue(new Task(() => this.WriteWarning(message)));
@@ -357,7 +357,7 @@ namespace Microsoft.Azure.Commands.Profile
                         SkipValidation,
                         WriteWarning,
                         name,
-                        skipContextPopulationList));
+                        shouldPopulateContextList));
                    task.Start();
                    while (!task.IsCompleted)
                    {
