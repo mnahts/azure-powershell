@@ -39,7 +39,7 @@ namespace Microsoft.Azure.PowerShell.Authenticators
             var authenticationClientFactory = interactiveParameters.AuthenticationClientFactory;
             IPublicClientApplication publicClient = null;
             var resource = interactiveParameters.Environment.GetEndpoint(interactiveParameters.ResourceId);
-            var scopes = new string[] { string.Format(AuthenticationHelpers.DefaultScope, resource) };
+            var scopes = AuthenticationHelpers.GetScope(onPremise, resource);
             TcpListener listener = null;
             var replyUrl = string.Empty;
             var port = 8399;
