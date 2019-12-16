@@ -355,7 +355,7 @@ namespace Microsoft.Azure.Commands.Profile
                         subscriptionName,
                         password,
                         SkipValidation,
-                        WriteWarning,
+                        WriteWarningEvent,
                         name,
                         shouldPopulateContextList));
                    task.Start();
@@ -380,6 +380,15 @@ namespace Microsoft.Azure.Commands.Profile
             while (_tasks.TryDequeue(out task))
             {
                 task.RunSynchronously();
+            }
+        }
+
+        private void WriteWarningEvent(string message)
+        {
+            EventHandler<StreamEventArgs> writeWarningEvent;
+            if (AzureSession.Instance.TryGetComponent(WriteWarningKey, out writeWarningEvent))
+            {
+                writeWarningEvent(this, new StreamEventArgs() { Message = message });
             }
         }
 
